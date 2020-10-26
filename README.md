@@ -12,6 +12,9 @@ Otherwise if you have 19.07.0, then you have to install **luci-compat**. I teste
 
 However you need to create your users on the linux system and upgrade */etc/config/rpcd* according to your needs.
 
+In **/usr/lib/lua/luci/contorller/admin/index.lua** serch follow line and add your users:
+```page.sysauth = {"root", "myuser"} #I add here myuser (one or more)```
+
 # Virtual Machine
 I have upload an openwrt 19.07 VM with this features:
   - OpenWrt 19.07.0
