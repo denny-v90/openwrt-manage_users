@@ -1,0 +1,40 @@
+<%+cbi/valueheader%>
+
+<%-
+	local utl = require "luci.util"
+	local uci = require "luci.model.uci"
+
+	local value = self:formvalue(section)
+
+	self.cast = nil
+
+	if not value or value == "-" then
+		value = self:cfgvalue(section) or self.default
+	end
+
+	local checked = { }
+	for value in utl.imatch(value) do
+		checked[value] = true
+	end
+
+	-- get entire first level nodes list from /etc/config/nodes
+	n_list = uci.cursor():get_all("nodes")
+-%>
+
+<div class="cbi-dropdown" display-items="5" placeholder="<%:-- Select -- %>"<%=
+	attr("name", cbid) .. ifattr(self.widget == "checkbox", "multiple", "multiple") ..
+	ifattr(self.widget == "checkbox", "optional", "optional")
+%>>
+	<ul>
+
+	<% for name, n in pairs(n_list) do	%>
+		<li<%= attr("data-value", name) .. ifattr(checked[name], "selected", "selected") %>>
+			<span class="ifacebadge"><%=name%>
+				<!--img style="width:16px; height:16px; vertical-align:middle" src="<%=resource%>/icons/<%= name%>.png" /-->
+			</span>
+		</li>
+	<% end %>
+	</ul>
+</div>
+
+<%+cbi/valuefooter%>
